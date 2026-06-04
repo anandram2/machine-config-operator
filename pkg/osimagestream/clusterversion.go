@@ -26,7 +26,7 @@ func GetClusterVersion(lister configlisters.ClusterVersionLister) (*configv1.Clu
 // GetReleasePayloadImage retrieves the release payload image from the given ClusterVersion resource.
 func GetReleasePayloadImage(clusterVersion *configv1.ClusterVersion) (string, error) {
 	if clusterVersion == nil || clusterVersion.Status.Desired.Image == "" {
-		return "", errors.New("ClusterVersion desired image is not yet available")
+		return "", errors.New("clusterVersion desired image is not yet available")
 	}
 	// Got it, store the variable and exit
 	return clusterVersion.Status.Desired.Image, nil
@@ -35,7 +35,7 @@ func GetReleasePayloadImage(clusterVersion *configv1.ClusterVersion) (string, er
 // GetInstallVersion returns the first known version from the given ClusterVersion history.
 func GetInstallVersion(clusterVersion *configv1.ClusterVersion) (*k8sversion.Version, error) {
 	if clusterVersion == nil {
-		return nil, errors.New("ClusterVersion cannot be nil")
+		return nil, errors.New("clusterVersion cannot be nil")
 	}
 	completed := make([]configv1.UpdateHistory, 0, len(clusterVersion.Status.History))
 	for _, entry := range clusterVersion.Status.History {
@@ -44,7 +44,7 @@ func GetInstallVersion(clusterVersion *configv1.ClusterVersion) (*k8sversion.Ver
 		}
 	}
 	if len(completed) == 0 {
-		return nil, errors.New("ClusterVersion has no completed updates in history")
+		return nil, errors.New("clusterVersion has no completed updates in history")
 	}
 
 	slices.SortFunc(completed, func(a, b configv1.UpdateHistory) int {

@@ -215,7 +215,7 @@ func (optr *Operator) syncAll(syncFuncs []syncFunc) error {
 		// If there was no sync error for this function, attempt to clear degrade
 		updatedCO, err = optr.clearDegradedStatus(updatedCO, sf.name)
 		if err != nil {
-			return fmt.Errorf("error clearing degraded status: %v", err)
+			return fmt.Errorf("error clearing degraded status: %w", err)
 		}
 	}
 
@@ -1154,7 +1154,7 @@ func (optr *Operator) syncControllerConfig(config *renderConfig) error {
 				cmNew.BinaryData = binData
 				_, err := optr.kubeClient.CoreV1().ConfigMaps(ctrlcommon.MCONamespace).Create(context.TODO(), &cmNew, metav1.CreateOptions{})
 				if err != nil {
-					return fmt.Errorf("Could not make kubeconfig-data CM, %v", err)
+					return fmt.Errorf("Could not make kubeconfig-data CM, %w", err)
 				}
 				editCCAnno = true
 			}
@@ -2354,7 +2354,7 @@ func (optr *Operator) syncMachineConfiguration(_ *renderConfig, _ *configv1.Clus
 			// This causes a re-sync and allows the cache for the lister to refresh.
 			return nil
 		}
-		return fmt.Errorf("grabbing MachineConfiguration/%s CR failed: %v", ctrlcommon.MCOOperatorKnobsObjectName, err)
+		return fmt.Errorf("grabbing MachineConfiguration/%s CR failed: %w", ctrlcommon.MCOOperatorKnobsObjectName, err)
 	}
 
 	// Set the log level to the value defined in the MachineConfiguration object
@@ -2399,7 +2399,7 @@ func (optr *Operator) syncMachineConfiguration(_ *renderConfig, _ *configv1.Clus
 			annoPatch := fmt.Sprintf(`{"metadata": {"annotations": {"%s": "%s"}}}`, ctrlcommon.BootImageOptedInAnnotation, metav1.Now().Format(time.RFC3339))
 			mcop, err = optr.mcopClient.OperatorV1().MachineConfigurations().Patch(context.TODO(), ctrlcommon.MCOOperatorKnobsObjectName, types.MergePatchType, []byte(annoPatch), metav1.PatchOptions{})
 			if err != nil {
-				return fmt.Errorf("failed to apply MachineConfiguration bootimage updates opt-in annotation : %v", err)
+				return fmt.Errorf("failed to apply MachineConfiguration bootimage updates opt-in annotation : %w", err)
 			}
 		}
 		mcop.Status = *newMachineConfigurationStatus
@@ -2415,7 +2415,7 @@ func (optr *Operator) syncMachineConfiguration(_ *renderConfig, _ *configv1.Clus
 			_, err = optr.mcopClient.OperatorV1().MachineConfigurations().UpdateStatus(context.TODO(), mcop, metav1.UpdateOptions{})
 			return err
 		}); err != nil {
-			return fmt.Errorf("error updating MachineConfiguration status: %v", err)
+			return fmt.Errorf("error updating MachineConfiguration status: %w", err)
 		}
 	}
 

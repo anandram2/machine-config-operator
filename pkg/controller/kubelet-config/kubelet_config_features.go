@@ -69,7 +69,7 @@ func (ctrl *Controller) syncFeatureHandler(key string) error {
 	// Grab APIServer to populate TLS settings in the default kubelet config
 	apiServer, err := ctrl.apiserverLister.Get(ctrlcommon.APIServerInstanceName)
 	if err != nil && !errors.IsNotFound(err) {
-		return fmt.Errorf("could not get the TLSSecurityProfile from %v: %v", ctrlcommon.APIServerInstanceName, err)
+		return fmt.Errorf("could not get the TLSSecurityProfile from %v: %w", ctrlcommon.APIServerInstanceName, err)
 	}
 
 	for _, pool := range mcpPools {

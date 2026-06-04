@@ -59,7 +59,7 @@ func (optr *Operator) updateOSImageStream(existingOSImageStream *v1alpha1.OSImag
 	currentDefault := existingOSImageStream.Status.DefaultStream
 	if currentDefault != requestedDefault {
 		if _, err := osimagestream.GetOSImageStreamSetByName(existingOSImageStream, requestedDefault); err != nil {
-			return fmt.Errorf("error syncing default OSImageStream with OSImageStream %s: %v", requestedDefault, err)
+			return fmt.Errorf("error syncing default OSImageStream with OSImageStream %s: %w", requestedDefault, err)
 		}
 
 		// DeepCopy to avoid mutating the shared informer cache
@@ -297,7 +297,7 @@ func (optr *Operator) getExistingOSImageStream() (*v1alpha1.OSImageStream, error
 	osImageStream, err := optr.osImageStreamLister.Get(ctrlcommon.ClusterInstanceNameOSImageStream)
 	if err != nil {
 		if !apierrors.IsNotFound(err) {
-			return nil, fmt.Errorf("failed to retrieve existing OSImageStream: %v", err)
+			return nil, fmt.Errorf("failed to retrieve existing OSImageStream: %w", err)
 		}
 		return nil, nil
 	}

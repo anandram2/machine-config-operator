@@ -579,7 +579,7 @@ func (ctrl *Controller) addMachineOSBuild(obj interface{}) {
 
 	mcp, err := ctrl.mcpLister.Get(poolName)
 	if err != nil {
-		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineOSBuild %#v: %v", curMOSB, err))
+		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineOSBuild %#v: %w", curMOSB, err))
 		return
 	}
 	klog.V(4).Infof("MachineOSBuild %s affects MachineConfigPool %s", curMOSB.Name, mcp.Name)
@@ -611,7 +611,7 @@ func (ctrl *Controller) updateMachineOSBuild(old, cur interface{}) {
 
 	mcp, err := ctrl.mcpLister.Get(poolName)
 	if err != nil {
-		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineOSBuild %#v: %v", curMOSB, err))
+		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineOSBuild %#v: %w", curMOSB, err))
 		return
 	}
 	klog.V(4).Infof("MachineOSBuild %s status changed for MachineConfigPool %s", curMOSB.Name, mcp.Name)
@@ -631,7 +631,7 @@ func (ctrl *Controller) addMachineConfigNode(obj interface{}) {
 
 	mcp, err := ctrl.mcpLister.Get(poolName)
 	if err != nil {
-		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineConfigNode %v: %v", curMCN, err))
+		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineConfigNode %v: %w", curMCN, err))
 		return
 	}
 	klog.V(4).Infof("MachineConfigNode %s affects MachineConfigPool %s", curMCN.Name, mcp.Name)
@@ -656,7 +656,7 @@ func (ctrl *Controller) updateMachineConfigNode(old, cur interface{}) {
 
 	mcp, err := ctrl.mcpLister.Get(curPoolName)
 	if err != nil {
-		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineConfigNode %v: %v", curMCN.Name, err))
+		utilruntime.HandleError(fmt.Errorf("Couldn't get MachineConfigPool from MachineConfigNode %v: %w", curMCN.Name, err))
 		return
 	}
 	klog.V(4).Infof("MachineConfigNode %s status changed for MachineConfigPool %s", curMCN.Name, mcp.Name)
@@ -1859,7 +1859,7 @@ func (ctrl *Controller) setUpdateInProgressTaint(ctx context.Context, nodeName s
 
 		patchBytes, err := strategicpatch.CreateTwoWayMergePatch(oldData, newData, corev1.Node{})
 		if err != nil {
-			return fmt.Errorf("failed to create patch for node %q: %v", nodeName, err)
+			return fmt.Errorf("failed to create patch for node %q: %w", nodeName, err)
 		}
 		_, err = ctrl.kubeClient.CoreV1().Nodes().Patch(ctx, nodeName, types.StrategicMergePatchType, patchBytes, metav1.PatchOptions{})
 		return err

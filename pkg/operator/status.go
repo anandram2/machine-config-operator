@@ -416,7 +416,7 @@ func (optr *Operator) GetAllManagedNodes(pools []*mcfgv1.MachineConfigPool) ([]*
 	for _, pool := range pools {
 		selector, err := metav1.LabelSelectorAsSelector(pool.Spec.NodeSelector)
 		if err != nil {
-			return nil, fmt.Errorf("label selector for pool %v failed %v", pool.Name, err)
+			return nil, fmt.Errorf("label selector for pool %v failed %w", pool.Name, err)
 		}
 		poolNodes, err := optr.nodeLister.List(selector)
 		if err != nil {

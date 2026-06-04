@@ -32,7 +32,7 @@ import (
 )
 
 func TestIsMachineConfigPoolConfigurationValid(t *testing.T) {
-	configNotFound := errors.New("Config Not Found")
+	configNotFound := errors.New("config not found")
 	type config struct {
 		name                 string
 		version              string

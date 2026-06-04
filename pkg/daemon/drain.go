@@ -116,7 +116,7 @@ func (dn *Daemon) performDrain() error {
 			return errors.New(failMsg)
 
 		}
-		return fmt.Errorf("Something went wrong while attempting to drain node: %v", err)
+		return fmt.Errorf("Something went wrong while attempting to drain node: %w", err)
 	}
 
 	logSystem("drain complete")
